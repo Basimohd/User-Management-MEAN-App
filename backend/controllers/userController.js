@@ -62,13 +62,27 @@ const fetchUser = async (req, res) => {
 }
 const imageUpload = async (req, res) => {
     try {
-        
+        const id = req.query.id;
+        const image = req.file.filename
+        await User.updateOne({ _id: id }, { $set: { image: image } })   
+        res.json({message:'Image Uploaded'}) 
     } catch (error) {
 
     }
 }
+const imageDelete = async (req, res) => {
+    try {
+      const id = req.query.id
+      await User.updateOne({ _id: id }, { $unset: { image: '' } })
+      res.json({ message: 'image removed' })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 module.exports = {
     createUser,
     verifyUser,
-    fetchUser
+    fetchUser,
+    imageUpload,
+    imageDelete
 }

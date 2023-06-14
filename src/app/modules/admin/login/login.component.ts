@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { fetchUserProfileAPI } from '../../store/user.action';
-import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-login',
@@ -11,23 +9,16 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-
-  submit: boolean = false
-  emailMessage!:string
-  passMessage!:string
-  user!:string
-
-  constructor(
-    private fb : FormBuilder,
-    private authService : AuthService,
-    private router : Router,
-    private store: Store){}
-
+  submit:boolean = false
+  passMessage!:string;
+  emailMessage!:string;
+  constructor(private fb:FormBuilder,
+    private authService:AuthService,
+    private router:Router){}
   loginForm = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required, Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,}$")]]
   })
-
   onSubmit(){
     this.submit = true
     if(this.loginForm.value.email){
@@ -35,18 +26,15 @@ export class LoginComponent {
     }
   }
   loginUser(){
-    this.authService.loginUser(this.loginForm.value).subscribe((response)=>{
+    this.authService.loginAdmin(this.loginForm.value).subscribe((response)=>{
       console.log(response)
       if(response.emailMatch){
         this.emailMessage = response.emailMatch
       }else if(response.passMatch){
         this.passMessage = response.passMatch
       }else{
-        this.user = response.user;
-        localStorage.setItem('userToken',response.userToken);
-        localStorage.setItem('userId',response.userId);
-        this.store.dispatch(fetchUserProfileAPI())
-        this.router.navigate(['/user/profile']);
+        localStorage.setItem('adminToken',response.userToken);
+        this.router.navigate(['/admin/users']);
       }
       setTimeout(()=>{
         this.passMessage = "" 

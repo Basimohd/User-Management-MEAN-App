@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +8,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-
+  constructor(private router: Router,
+    private store:Store){}
+  logout(){
+    localStorage.removeItem('userToken')
+    localStorage.removeItem('userId')
+    this.router.navigate(['/login'])
+    console.log(localStorage)
+  }
 }

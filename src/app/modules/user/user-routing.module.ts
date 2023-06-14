@@ -12,7 +12,7 @@ const routes: Routes = [
   {path:'user', canActivate:[AccessAuthGuard],component:HomeComponent,children:[
     {path:'profile',component:ProfileComponent}
   ]},
-  {path:'' , redirectTo:'/login', pathMatch:'prefix'}
+  {path:'' , redirectTo:'/login', pathMatch:'full'}
 ];
 
 @NgModule({

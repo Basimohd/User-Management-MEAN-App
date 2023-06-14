@@ -1,21 +1,24 @@
-const util = require("util");
-const multer = require("multer");
-const maxSize = 2 * 1024 * 1024;
+const multer=require('multer')
+const path=require('path')
+
 
 let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, __basedir + "/resources/static/assets/uploads/");
-  },
-  filename: (req, file, cb) => {
-    console.log(file.originalname);
-    cb(null, file.originalname);
-  },
-});
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        const name = Date.now() + '-' + file.originalname 
+      cb(null, name)
+    }
+})
 
-let uploadFile = multer({
-  storage: storage,
-  limits: { fileSize: maxSize },
-}).single("file");
+const fileFilter = function (req, file, cb) {
+  // check if file is an image
+  if (!file.mimetype.startsWith('image/')) {
+    return cb(new Error('File type not supported!'), false);
+  }
+  cb(null, true);
+}
 
-let uploadFileMiddleware = util.promisify(uploadFile);
-module.exports = uploadFileMiddleware;
+let upload = multer({ storage: storage,fileFilter:fileFilter })
+module.exports={upload}

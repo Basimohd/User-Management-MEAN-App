@@ -9,7 +9,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { StoreModule } from '@ngrx/store';
-import { userReducer } from '../store/user.reducer';
+import { profileReducer } from '../store/user.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { userEffects } from '../store/user.effects';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -27,7 +27,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CommonModule,
     UserRoutingModule,
     ReactiveFormsModule,
-    StoreModule.forFeature('profile',userReducer),
+    StoreModule.forFeature('profile',profileReducer),
     EffectsModule.forFeature([userEffects]),
     FontAwesomeModule
   ]

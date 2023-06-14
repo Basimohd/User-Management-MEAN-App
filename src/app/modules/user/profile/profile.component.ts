@@ -4,7 +4,7 @@ import { profileSelectorData } from '../../store/user.selector';
 import { Observable } from 'rxjs';
 import { Profile } from '../../store/user';
 import { fetchUserProfileAPI } from '../../store/user.action';
-import { faAdd, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -13,30 +13,49 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  faEdit = faAdd;
+  faAdd = faAdd;
+  faTrash = faTrash;
   isImage: boolean = false;
   Profile!: any;
   profileData!: any;
   profile$!: Observable<Profile>
-
+  profileImage!: string;
+  defaultImage: string = "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"
   constructor(private store: Store,
-    private authService:AuthService) { }
+    private authService: AuthService) {
+    
+  }
 
-  ngOnInit():void {
+  ngOnInit(): void {
     this.store.dispatch(fetchUserProfileAPI())
     this.profile$ = this.store.pipe(select(profileSelectorData))
     this.profile$.subscribe((data) => {
-      if(data.image){
+      
+      if (data.image) {
         this.isImage = true
+        this.profileImage = `http://localhost:3000/${data.image}`
       }
     })
   }
 
-  onFileSelected(e:any){
+  onFileSelected(e: any) {
     let file = e.target.files[0];
     const formData = new FormData();
     formData.append('image', file, file.name);
     const userId = localStorage.getItem('userId');
-    this.authService.
+    this.authService.uploadProfile(formData, userId).subscribe((response) => {
+      this.store.dispatch(fetchUserProfileAPI())
+    })
+  }
+  removeImage() {
+    const confirmDelete = confirm("Are you sure to remove Profile Image");
+    if (confirmDelete) {
+      let userId = localStorage.getItem('userId');
+      this.authService.deleteProfile(userId).subscribe((res) => {
+        this.isImage = false;
+
+        this.store.dispatch(fetchUserProfileAPI())
+      })
+    }
   }
 }

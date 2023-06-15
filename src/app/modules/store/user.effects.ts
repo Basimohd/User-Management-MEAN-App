@@ -21,6 +21,7 @@ export class userEffects {
             })
         )}
     )
+    
     loadAllUsers$ = createEffect(() =>{
         return this.actions$.pipe(
             ofType(fetchUsersAPI),

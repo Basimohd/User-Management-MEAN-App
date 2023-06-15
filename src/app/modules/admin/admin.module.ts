@@ -13,6 +13,7 @@ import { userReducer } from '../store/user.reducer';
 import { userEffects } from '../store/user.effects';
 import { HttpClientModule } from '@angular/common/http';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { CreateUserComponent } from './create-user/create-user.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     UserDetailsComponent,
     HomeComponent,
     HeaderComponent,
-    EditUserComponent
+    EditUserComponent,
+    CreateUserComponent
   ],
   imports: [
     CommonModule,
